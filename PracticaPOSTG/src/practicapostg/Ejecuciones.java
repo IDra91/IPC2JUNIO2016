@@ -29,24 +29,32 @@ public class Ejecuciones {
     }
     
     
-    public void Conexion(){
-        if(conexion != null){
-            return;
-        }
+   public Connection AbrirConexion(){
+        
         
         String url ="jdbc:postgresql://localhost:5432/CoperachaSA";
-        
+        String username = "postgres";
 	String password ="manuel123";
         try{
             Class.forName("org.postgresql.Driver");
             
-            conexion = DriverManager.getConnection(url, "CoperachaSA", password);
+            conexion = DriverManager.getConnection(url, username, password);
             
             if(conexion != null){
                JOptionPane.showMessageDialog(null, "Conexión realizada :D.");
+               return conexion;
             }
         }catch (Exception e){
             JOptionPane.showMessageDialog(null, "Conexión fallida.");
         }
+        return conexion;
     }
+        
+        public void CerrarConexion(){
+            try{
+                conexion.close();
+            }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error para cerrar base de datos D:");
+        }
+        }
 }

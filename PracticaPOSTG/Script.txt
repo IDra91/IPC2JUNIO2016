@@ -1,0 +1,91 @@
+create table Usuario(
+	Cod_Usuario varchar(10) not null,
+	Username varchar(50) not null,
+	Password varchar(20) not null,
+	Nombre varChar(50) not null,
+	Apellido varChar(50) null,
+	No_Teléfono varChar(13) null,
+	No_Tarjeta varChar(20) not null, 
+	Comportamiento boolean not null,
+	primary key (Cod_Usuario)
+);
+
+create table Staff(
+	Cod_Usuario varchar(10) not null,
+	Username varchar(50) not null,
+	Password varchar(20) not null,
+	Nombre varChar(50) not null,
+	Apellido varChar(50) null,
+	No_Teléfono varChar(13) null,
+	No_Tarjeta varChar(20) not null,  
+	primary key (Cod_Usuario)
+);
+
+create table Categoria(
+	Cod_Categoria varchar(10) not null,
+	Titulo varchar(50) not null,
+	Descripcion Text not null,
+	primary key (Cod_Categoria)
+);
+
+create table Sub_Categoria(
+	Cod_Sub varchar(10) not null,
+	Cod_Categoria varchar(10) references Categoria(Cod_Categoria) not null,
+	Titulo varChar(50) not null,
+	Descripcion Text not null,
+	primary key (Cod_Sub)
+);
+
+create table Rol(
+	Cod_Rol varchar(10) not null,
+	Cod_Usuario varchar(50) references Usuario(Cod_Usuario) not null,
+	Cod_Staff varchar(20) references Staff(Cod_Usuario) null,
+	Titulo varChar(50) not null,
+	Descripcion Text not null,
+	primary key (Cod_Rol)
+);
+
+create table Propuesta(
+	Cod_Propuesta varchar(10) not null,
+	Cod_Sub varchar(10) references Sub_Categoria(Cod_Sub) not null,
+	Cod_Categoria varchar(10) references Categoria(Cod_Categoria) not null,
+	Cod_Usuario varChar(10) references Usuario(Cod_Usuario) not null,
+	Cod_Staff varChar(10) references Staff(Cod_Usuario) null,
+	Titulo varChar(50) not null,
+	Descripcion Text null,
+	Blog varchar(400) null,
+	Estado Text not null, 
+	Situacion boolean not null,
+	Fecha_Inicio timestamp not null,
+	Fecha_Límite timestamp not null,
+	primary key (Cod_Propuesta)
+);
+
+create table Recompensa(
+	Cod_Recompensa varchar(10) not null,
+	Cod_Propuesta varchar(10) references Propuesta(Cod_Propuesta) not null,
+	Tipo varChar(100) not null,
+	Estado varChar(100) not null,
+	Clase varChar(100) not null,
+	Precio_Inicial Money not null, 
+	Monto_Recaudado Money not null,
+	primary key (Cod_Recompensa)
+);
+
+create table Comentarios(
+	No_Comentario varchar(10) not null,
+	Cod_Propuesta varchar(10) references Propuesta(Cod_Propuesta) not null,
+	Titulo varchar(50) not null,
+	Descripcion Text not null,
+	Fecha_Posteado timestamp not null,
+	primary key (No_Comentario)
+);
+
+create table Historial(
+	Cod_Historial varchar(10) not null,
+	Cod_Usuario varchar(10) references Usuario(Cod_Usuario) not null,
+	Cod_Recompensa varchar(10) references Recompensa(Cod_Recompensa) not null,
+	Estado Text not null,
+	Descripcion Text not null,
+	primary key (Cod_Historial)
+);

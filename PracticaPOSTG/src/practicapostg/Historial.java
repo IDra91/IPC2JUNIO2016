@@ -5,6 +5,11 @@
  */
 package practicapostg;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Manuel
@@ -18,6 +23,76 @@ public class Historial extends javax.swing.JFrame {
         initComponents();
     }
 
+    
+    public void InsertarHistorial(String Cod, String User, String Recompensa, String estado, String Desc){
+             Connection conexion1 = null;
+            Statement s = null;
+            PreparedStatement ps = null;
+            String insertarRecompensa = "INSERT INTO historial(cod_historial, cod_usuario, cod_recompensa, estado, descripcion) VALUES (?, ?, ?, ?, ?);";
+            try{
+                conexion1 = new Ejecuciones().AbrirConexion() ;
+                ps = conexion1.prepareStatement(insertarRecompensa);
+                ps.setString(1, Cod);
+                ps.setString(2, User);
+                ps.setString(3, Recompensa);
+                ps.setString(4, estado);
+                ps.setString(5, Desc);
+                ps.executeUpdate();
+                conexion1.close();
+                JOptionPane.showMessageDialog(null, "Se ha agregado exitosamente :D");
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Error de inserción D:");
+            }
+        }
+    
+    public void EliminarHistorial(String codigo){
+            Connection conexion1 = null;
+            Statement s = null;
+            PreparedStatement ps = null;
+            String eliminarHistorial = "DELETE FROM historial where cod_historial = (?)";
+            int confirmacion = JOptionPane.showConfirmDialog(null, "¿Desea eliminar la recompensa?","Confirmar Eliminacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(confirmacion == 0){
+                try{
+                    conexion1 = new Ejecuciones().AbrirConexion();
+                    ps = conexion1.prepareStatement(eliminarHistorial);
+                    ps.setString(1, codigo);
+                    ps.executeUpdate();
+                    conexion1.close();
+                    JOptionPane.showMessageDialog(null, "Eliminado correctamente :D");
+                }catch(Exception e){
+                    JOptionPane.showMessageDialog(null, "Error en la eliminación D:");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Se han conservado los datos");
+            }
+        }
+    
+        public void ModificarHistorial(String Cod, String User, String Recompensa, String estado, String Desc){
+            Connection conexion1 = null;
+            Statement s = null;
+            PreparedStatement ps = null;
+            String modificar = "UPDATE historial SET cod_usuario = (?), cod_recompensa = (?), estado = (?), descripcion = (?)  where cod_historial = (?);";
+            int confirmacion = JOptionPane.showConfirmDialog(null, "¿Desea modificar la recompensa?","Confirmar Modificacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(confirmacion == 0){
+                try{
+                    conexion1 = new Ejecuciones().AbrirConexion();
+                    ps = conexion1.prepareStatement(modificar);
+                    ps.setString(1, User);
+                    ps.setString(2, Recompensa);
+                    ps.setString(3, estado);
+                    ps.setString(4, Desc);
+                    ps.setString(5, Cod);
+                    ps.executeUpdate();
+                    conexion1.close();
+                    JOptionPane.showMessageDialog(null, "Modificado correctamente :D");
+                }catch(Exception e){
+                    JOptionPane.showMessageDialog(null, "Error en la actualizacion D:");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Se han conservado los datos");
+            }
+        }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,21 +102,125 @@ public class Historial extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        TxtNo = new javax.swing.JTextField();
+        TxtCodU = new javax.swing.JTextField();
+        TxtReco = new javax.swing.JTextField();
+        TxtEst = new javax.swing.JTextField();
+        TxtDesc = new javax.swing.JTextField();
+        BtnAdd = new javax.swing.JButton();
+        BtnMod = new javax.swing.JButton();
+        BtnDelete = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Número del Historial:");
+
+        jLabel2.setText("Código del Usuario:");
+
+        jLabel3.setText("Código de la Recompensa:");
+
+        jLabel4.setText("Estado:");
+
+        jLabel5.setText("Descripción:");
+
+        BtnAdd.setText("Agregar");
+        BtnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAddActionPerformed(evt);
+            }
+        });
+
+        BtnMod.setText("Modificar");
+
+        BtnDelete.setText("Eliminar");
+        BtnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(34, 34, 34)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TxtDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TxtEst, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TxtReco, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TxtCodU, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TxtNo, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(BtnAdd)
+                        .addGap(18, 18, 18)
+                        .addComponent(BtnMod)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(BtnDelete)))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(TxtNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(TxtCodU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(TxtReco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(TxtEst, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(TxtDesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BtnAdd)
+                    .addComponent(BtnMod)
+                    .addComponent(BtnDelete))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAddActionPerformed
+       String Numero = TxtNo.getText();
+       String User = TxtCodU.getText();
+       String Reco = TxtReco.getText();
+       String estado = TxtEst.getText();
+       String descripcion = TxtDesc.getText();
+       this.InsertarHistorial(Numero, User, Reco, estado, descripcion);
+    }//GEN-LAST:event_BtnAddActionPerformed
+
+    private void BtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDeleteActionPerformed
+        String Codigo = TxtNo.getText(); 
+        this.EliminarHistorial(Codigo);
+    }//GEN-LAST:event_BtnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +258,18 @@ public class Historial extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnAdd;
+    private javax.swing.JButton BtnDelete;
+    private javax.swing.JButton BtnMod;
+    private javax.swing.JTextField TxtCodU;
+    private javax.swing.JTextField TxtDesc;
+    private javax.swing.JTextField TxtEst;
+    private javax.swing.JTextField TxtNo;
+    private javax.swing.JTextField TxtReco;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     // End of variables declaration//GEN-END:variables
 }
